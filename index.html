@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="">
+</head>
+
+<body class="fs-1" style="background-color:rgb(235, 234, 245)">
+    <div class="title;mb-2 text-white bg-opacity-10" >
+        <h1 style="text-align: center; background-color: rgb(88, 180, 187);">Evidencia 5</h1>
+    </div>
+    <h2 style="text-align: center;">Frida Sofia Perez Osuna | 2019030711</h2>
+
+    <div id="data"></div>
+
+    <p style="text-align: center; margin-top: 0.8cm; margin-right: 2.5cm;">
+        <br>
+        <label for="id">ID:</label>
+        <input type="number" name="id" id="identidad" min="1" max="5">
+        <button type="button" class="btn btn-outline-primary" id="buscador">Buscar</button>
+        
+        </br>
+    </p>
+
+    <p style="text-align: center; margin-top: 0.8cm;">
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="titulo" readonly="readonly" size="30">
+    </p>
+
+    <p style="text-align: center; margin-right: 5cm; margin-bottom: 1.5cm; margin-top: 0.8cm;">
+        <label for="completed">Completed:</label>
+        <input type="text" name="completed" id="completado" readonly="readonly" size="10">
+    </p>
+
+    <p>
+    <table class="table table-hover table-striped" style="color: rgb(0, 0, 0);">
+        <thead>
+            <tr class="table-info">
+                <th>Name</th>
+                <th>E-mail</th>
+                <th>Phone</th>
+                <th>Website</th>
+            </tr>
+        </thead>
+        <tbody id="tabla"></tbody>
+    </table>
+    </p>
+
+    <p style="text-align: center; margin-top: 3cm; margin-left: 30cm;">
+        <button type="button" class="btn btn-outline-danger btn-lg" id="limpiador">Limpiar</button>
+    </p>
+
+    <script>
+
+        const boton = document.getElementById('buscador')
+        const boton2 = document.getElementById('limpiador')
+
+        const identidad = document.getElementById('identidad').value;
+
+        boton.addEventListener('click', async () => {
+            if (document.getElementById('identidad').value <= 0 || document.getElementById('identidad').value >= 201) {
+                console.log("ID invalido");
+                alert("Numero Invalido")
+            }
+            else {
+                if (await retorno() === true) {
+                    if (document.getElementById('identidad').value > 10) {
+                        alert("Solicitud Exitosa")
+                        alert("ATENCION: Este usuario no cuenta con los datos de la tabla")
+
+                    } else {
+                        alert("Solicitud Exitosa")
+                    }
+                } else {
+                    console.log("Hubo un error al solicitar la información: " + error.message);
+                    alert("Solicitud Fallida")
+                }
+            }
+
+        });
+
+        boton2.addEventListener("click", async () => {
+            document.getElementById("identidad").value = "";
+            document.getElementById("titulo").value = "";
+            document.getElementById("completado").value = "";
+            document.getElementById("row").remove();
+        });
+
+        const retorno = async () => {
+
+            const identidad2 = document.getElementById('identidad').value;
+
+            try {
+                axios({
+                    method: 'GET',
+                    url: 'https://jsonplaceholder.typicode.com/todos'
+                }).then(res => {
+                    console.log(res.data)
+                    for (const x of res.data) {
+                        if (identidad2 == x.id) {
+                            document.getElementById('titulo').value = x.title;
+                            document.getElementById('completado').value = x.completed;
+                        }
+
+                    }
+                }).catch(err => console.log(err))
+
+                axios({
+                    method: 'GET',
+                    url: 'https://jsonplaceholder.typicode.com/users'
+                }).then(res => {
+
+                    for (x of res.data) {
+                        console.log(res.data);
+                        if (identidad2 == x.id) {
+                            tabla.innerHTML += `
+                                  <tr id="row">
+                        <td>${x.name}</td>
+                        <td>${x.email}</td>
+                        <td>${x.phone}</td>
+                        <td>${x.website}</td>
+                    </tr>`
+                        }
+                    }
+                })
+
+                return true;
+
+
+            } catch (error) {
+                console.log("Hubo un error: " + error.message);
+            }
+
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
