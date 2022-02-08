@@ -65,13 +65,13 @@
 
         const identidad = document.getElementById('identidad').value;
 
-        boton.addEventListener('click', async () => {
+        boton.addEventListener('click', () => {
             if (document.getElementById('identidad').value <= 0 || document.getElementById('identidad').value >= 201) {
                 console.log("ID invalido");
                 alert("Numero Invalido")
             }
             else {
-                if (await retorno() === true) {
+                if (retorno() === false) {
                     if (document.getElementById('identidad').value > 10) {
                         alert("Solicitud Exitosa")
                         alert("ATENCION: Este usuario no cuenta con los datos de la tabla")
@@ -87,7 +87,7 @@
 
         });
 
-        boton2.addEventListener("click", async () => {
+        boton2.addEventListener("click", () => {
             document.getElementById("identidad").value = "";
             document.getElementById("titulo").value = "";
             document.getElementById("completado").value = "";
